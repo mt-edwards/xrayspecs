@@ -17,3 +17,5 @@ Imports:
     rlang,
     magrittr,
     parsnip
+URL: https://github.com/mt-edwards/xrayspecs
+BugReports: https://github.com/mt-edwards/xrayspecs/issues
