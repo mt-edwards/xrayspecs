@@ -1,0 +1,19 @@
+Package: xrayspecs
+Title: Model-agnostic Interpretation
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Matthew",
+           family = "Edwards",
+           role = c("aut", "cre"),
+           email = "mtedwards@protonmail.com")
+Description: xrayspecs provides model-agnostic interprestions of tidymodels.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    dplyr,
+    purrr,
+    ggplot2,
+    rlang,
+    magrittr,
+    parsnip

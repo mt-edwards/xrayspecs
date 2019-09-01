@@ -1,0 +1,104 @@
+#' Feature Sequence
+#'
+#' @param feature
+#' @param len
+#'
+#' @return
+#' @export
+#'
+#' @examples
+feature_seq <- function(feature, len = 100) {
+  if (class(feature) == "numeric") {
+    seq(min(feature), max(feature), length.out = len)
+  } else if (class(feature) == "factor") {
+    factor(levels(feature))
+  }
+}
+
+#' Feature Replace
+#'
+#' @param data
+#' @param feature_name
+#' @param feature_value
+#'
+#' @return
+#' @export
+#'
+#' @examples
+feature_replace <- function(data, feature_name, feature_value) {
+  dplyr::mutate(data, !!ensym(feature_name) := feature_value)
+}
+
+#' Mean Predict
+#'
+#' @param object
+#' @param data
+#'
+#' @return
+#' @export
+#'
+#' @examples
+mean_predict <- function(object, data) {
+  mode <- purrr::pluck(object, "spec", "mode")
+  if (mode == "regression") {
+    parsnip::predict.model_fit(object, data) %>%
+      dplyr::summarise(.mean_pred = mean(.pred))
+  } else if (mode == "classification") {
+    predict(object, data, type = "prob") %>%
+      dplyr::summarise(.mean_pred = mean(.pred_1))
+  }
+}
+
+#' Effect
+#'
+#' @param object
+#' @param data
+#' @param feature_name
+#'
+#' @return
+#' @export
+#'
+#' @examples
+effect <- function(object, data, feature_name) {
+  feature_name <- ensym(feature_name)
+  fseq <- feature_seq(dplyr::pull(data, !!feature_name))
+  purrr::map(fseq, feature_replace, data = data, feature_name = !!feature_name) %>%
+    purrr::map_dfr(mean_predict, object = object) %>%
+    dplyr::bind_cols(!!feature_name := fseq)
+}
+
+#' Effect Plot
+#'
+#' @param object
+#' @param data
+#' @param feature_name
+#'
+#' @return
+#' @export
+#'
+#' @examples
+effect_plot <- function(object, data, feature_name) {
+  feature_name <- ensym(feature_name)
+  feature_class <- class(dplyr::pull(data, !!feature_name))
+  object_mode <- purrr::pluck(object, "spec", "mode")
+  effect_data <- effect(object, data, !!feature_name)
+  if (feature_class == "numeric" & object_mode == "regression") {
+    ggplot2::ggplot(effect_data) +
+    ggplot2::geom_line(ggplot2::aes(x = !!feature_name, y = .mean_pred)) +
+    ggplot2::ylab("Prediction")
+  } else if (feature_class == "numeric" & object_mode == "classification") {
+    ggplot2::ggplot(effect_data) +
+    ggplot2::geom_line(ggplot2::aes(x = !!feature_name, y = .mean_pred)) +
+    ggplot2::ylab("Prediction") +
+    ggplot2::ylim(0, 1)
+  } else if (feature_class == "factor" & object_mode == "regression") {
+    ggplot2::ggplot(effect_data) +
+    ggplot2::geom_bar(ggplot2::aes(x = !!feature_name, weight = .mean_pred)) +
+    ggplot2::ylab("Prediction")
+  } else if (feature_class == "factor" & object_mode == "classification") {
+    ggplot2::ggplot(effect_data) +
+    ggplot2::geom_bar(ggplot2::aes(x = !!feature_name, weight = .mean_pred)) +
+    ggplot2::ylab("Prediction") +
+    ggplot2::ylim(0, 1)
+  }
+}
