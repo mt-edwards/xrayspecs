@@ -16,6 +16,8 @@ Imports:
     ggplot2,
     rlang,
     magrittr,
-    parsnip
+    parsnip,
+    yardstick,
+    forcats
 URL: https://github.com/mt-edwards/xrayspecs
 BugReports: https://github.com/mt-edwards/xrayspecs/issues

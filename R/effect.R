@@ -39,11 +39,10 @@ feature_replace <- function(data, feature_name, feature_value) {
 #'
 #' @examples
 mean_predict <- function(object, data) {
-  mode <- purrr::pluck(object, "spec", "mode")
-  if (mode == "regression") {
+  if (object$spec$mode == "regression") {
     parsnip::predict.model_fit(object, data) %>%
       dplyr::summarise(.mean_pred = mean(.pred))
-  } else if (mode == "classification") {
+  } else if (object$spec$mode == "classification") {
     predict(object, data, type = "prob") %>%
       dplyr::summarise(.mean_pred = mean(.pred_1))
   }
@@ -80,22 +79,21 @@ effect <- function(object, data, feature_name) {
 effect_plot <- function(object, data, feature_name) {
   feature_name <- ensym(feature_name)
   feature_class <- class(dplyr::pull(data, !!feature_name))
-  object_mode <- purrr::pluck(object, "spec", "mode")
   effect_data <- effect(object, data, !!feature_name)
-  if (feature_class == "numeric" & object_mode == "regression") {
+  if (feature_class == "numeric" & object$spec$mode == "regression") {
     ggplot2::ggplot(effect_data) +
     ggplot2::geom_line(ggplot2::aes(x = !!feature_name, y = .mean_pred)) +
     ggplot2::ylab("Prediction")
-  } else if (feature_class == "numeric" & object_mode == "classification") {
+  } else if (feature_class == "numeric" & object$spec$mode == "classification") {
     ggplot2::ggplot(effect_data) +
     ggplot2::geom_line(ggplot2::aes(x = !!feature_name, y = .mean_pred)) +
     ggplot2::ylab("Prediction") +
     ggplot2::ylim(0, 1)
-  } else if (feature_class == "factor" & object_mode == "regression") {
+  } else if (feature_class == "factor" & object$spec$mode == "regression") {
     ggplot2::ggplot(effect_data) +
     ggplot2::geom_bar(ggplot2::aes(x = !!feature_name, weight = .mean_pred)) +
     ggplot2::ylab("Prediction")
-  } else if (feature_class == "factor" & object_mode == "classification") {
+  } else if (feature_class == "factor" & object$spec$mode == "classification") {
     ggplot2::ggplot(effect_data) +
     ggplot2::geom_bar(ggplot2::aes(x = !!feature_name, weight = .mean_pred)) +
     ggplot2::ylab("Prediction") +
