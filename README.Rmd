@@ -88,13 +88,13 @@ To display a partial dependence effect plot of a random forest feature all you n
 library(purrr)
 
 feature_names <- c("wt", "disp", "hp", "cyl")
-rf_plots <- map(feature_names, effect_plot, object = rf, data = mtcars)
+rf_plots <- map(feature_names, effect_plot, object = rf, new_data = mtcars)
 plot_grid(plotlist = rf_plots, labels = "Random Forest Feature Effects")
 ```
 
 Note that effect of the `disp` variable is reversed in the linear regression model. This is because the random forest captures interactions between the features of the model whereas the linear regression model does not. 
 
 ```{r}
-lr_plots <- map(feature_names, effect_plot, object = lr, data = mtcars)
+lr_plots <- map(feature_names, effect_plot, object = lr, new_data = mtcars)
 plot_grid(plotlist = lr_plots, labels = "Linear Regression Feature Effects")
 ```

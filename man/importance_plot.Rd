@@ -4,12 +4,12 @@
 \alias{importance_plot}
 \title{Importance Plot}
 \usage{
-importance_plot(object, data, target_name)
+importance_plot(object, new_data, target_name)
 }
 \arguments{
 \item{object}{object}
 
-\item{data}{data}
+\item{new_data}{new_data}
 
 \item{target_name}{target_name}
 }

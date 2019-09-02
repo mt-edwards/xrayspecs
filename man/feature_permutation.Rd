@@ -4,10 +4,10 @@
 \alias{feature_permutation}
 \title{Feature Permutation}
 \usage{
-feature_permutation(data, feature_name)
+feature_permutation(new_data, feature_name)
 }
 \arguments{
-\item{data}{data}
+\item{new_data}{new_data}
 
 \item{feature_name}{feature_name}
 }

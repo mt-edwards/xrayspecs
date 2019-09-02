@@ -4,10 +4,10 @@
 \alias{feature_replace}
 \title{Feature Replace}
 \usage{
-feature_replace(data, feature_name, feature_value)
+feature_replace(new_data, feature_name, feature_value)
 }
 \arguments{
-\item{data}{data}
+\item{new_data}{new_data}
 
 \item{feature_name}{feature_name}
 

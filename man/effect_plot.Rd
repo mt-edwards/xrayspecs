@@ -4,12 +4,12 @@
 \alias{effect_plot}
 \title{Effect Plot}
 \usage{
-effect_plot(object, data, feature_name)
+effect_plot(object, new_data, feature_name)
 }
 \arguments{
 \item{object}{object}
 
-\item{data}{data}
+\item{new_data}{new_data}
 
 \item{feature_name}{feature_name}
 }

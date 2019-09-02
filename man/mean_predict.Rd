@@ -4,12 +4,12 @@
 \alias{mean_predict}
 \title{Mean Predict}
 \usage{
-mean_predict(object, data)
+mean_predict(object, new_data)
 }
 \arguments{
 \item{object}{object}
 
-\item{data}{data}
+\item{new_data}{new_data}
 }
 \description{
 Mean Predict
