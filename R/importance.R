@@ -71,5 +71,5 @@ importance_plot <- function(object, new_data, target_name) {
     ggplot2::geom_bar(ggplot2::aes(x = forcats::fct_reorder(feature, .estimate, .desc = TRUE), weight = .estimate)) +
     ggplot2::coord_flip() +
     ggplot2::xlab("Features") +
-    ggplot2::ylab(dplyr::if_else(object$spec$mode == "regression", "Root Mean Square Error Drop", "Accuracy Drop"))
+    ggplot2::ylab(dplyr::if_else(object$spec$mode == "regression", "Root Mean Square Error Loss", "Accuracy Loss"))
 }
