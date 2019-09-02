@@ -1,7 +1,7 @@
 #' Feature Permutation
 #'
-#' @param data
-#' @param feature_name
+#' @param data data
+#' @param feature_name feature_name
 #'
 #' @return
 #' @export
@@ -14,9 +14,9 @@ feature_permutation <- function(data, feature_name) {
 
 #' Object Metric
 #'
-#' @param object
-#' @param data
-#' @param target_name
+#' @param object object
+#' @param data data
+#' @param target_name target_name
 #'
 #' @return
 #' @export
@@ -37,9 +37,9 @@ object_metric <- function(object, data, target_name) {
 
 #' Importance
 #'
-#' @param object
-#' @param data
-#' @param target_name
+#' @param object object
+#' @param data data
+#' @param target_name target_name
 #'
 #' @return
 #' @export
@@ -57,9 +57,9 @@ importance <- function(object, data, target_name) {
 
 #' Importance Plot
 #'
-#' @param object
-#' @param data
-#' @param target_name
+#' @param object object
+#' @param data data
+#' @param target_name target_name
 #'
 #' @return
 #' @export

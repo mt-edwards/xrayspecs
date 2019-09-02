@@ -1,7 +1,7 @@
 #' Feature Sequence
 #'
-#' @param feature
-#' @param len
+#' @param feature feature
+#' @param len len
 #'
 #' @return
 #' @export
@@ -17,9 +17,9 @@ feature_seq <- function(feature, len = 100) {
 
 #' Feature Replace
 #'
-#' @param data
-#' @param feature_name
-#' @param feature_value
+#' @param data data
+#' @param feature_name feature_name
+#' @param feature_value feature_value
 #'
 #' @return
 #' @export
@@ -31,8 +31,8 @@ feature_replace <- function(data, feature_name, feature_value) {
 
 #' Mean Predict
 #'
-#' @param object
-#' @param data
+#' @param object object
+#' @param data data
 #'
 #' @return
 #' @export
@@ -50,9 +50,9 @@ mean_predict <- function(object, data) {
 
 #' Effect
 #'
-#' @param object
-#' @param data
-#' @param feature_name
+#' @param object object
+#' @param data data
+#' @param feature_name feature_name
 #'
 #' @return
 #' @export
@@ -68,9 +68,9 @@ effect <- function(object, data, feature_name) {
 
 #' Effect Plot
 #'
-#' @param object
-#' @param data
-#' @param feature_name
+#' @param object object
+#' @param data data
+#' @param feature_name feature_name
 #'
 #' @return
 #' @export

@@ -1,8 +1,8 @@
 ---
-title: "example"
+title: "xrayspecs Example"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{example}
+  %\VignetteIndexEntry{xrayspecs Example}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -55,4 +55,3 @@ feature_names <- c("wt", "disp", "hp", "cyl")
 plots <- map(feature_names, effect_plot, object = rf, data = mtcars)
 plot_grid(plotlist = plots)
 ```
-
