@@ -65,11 +65,12 @@ importance_data <- function(object, new_data, target_name) {
 #' @export
 #'
 #' @examples
-importance_plot <- function(object, new_data, target_name) {
+importance_plot <- function(object, new_data, target_name,  title = "Importance Plot", subtitle = NULL) {
   importance_data(object, new_data, !!ensym(target_name)) %>%
     ggplot2::ggplot() +
     ggplot2::geom_bar(ggplot2::aes(x = forcats::fct_reorder(feature, .estimate, .desc = TRUE), weight = .estimate)) +
     ggplot2::coord_flip() +
+    ggplot2::labs(title = title, subtitle = subtitle) +
     ggplot2::xlab("Features") +
     ggplot2::ylab(dplyr::if_else(object$spec$mode == "regression", "Root Mean Square Error Loss", "Accuracy Loss"))
 }

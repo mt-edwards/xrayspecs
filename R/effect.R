@@ -73,26 +73,30 @@ effect_data <- function(object, new_data, feature_name) {
 #' @export
 #'
 #' @examples
-effect_plot <- function(object, new_data, feature_name) {
+effect_plot <- function(object, new_data, feature_name, title = "Effect Plot", subtitle = NULL) {
   feature_name <- ensym(feature_name)
   feature_class <- class(dplyr::pull(new_data, !!feature_name))
   effect_tbl <- effect_data(object, new_data, !!feature_name)
   if (feature_class == "numeric" & object$spec$mode == "regression") {
     ggplot2::ggplot(effect_tbl) +
     ggplot2::geom_line(ggplot2::aes(x = !!feature_name, y = .mean_pred)) +
+    ggplot2::labs(title = title, subtitle = subtitle) +
     ggplot2::ylab("Prediction")
   } else if (feature_class == "numeric" & object$spec$mode == "classification") {
     ggplot2::ggplot(effect_tbl) +
     ggplot2::geom_line(ggplot2::aes(x = !!feature_name, y = .mean_pred)) +
+    ggplot2::labs(title = title, subtitle = subtitle) +
     ggplot2::ylab("Prediction") +
     ggplot2::ylim(0, 1)
   } else if (feature_class == "factor" & object$spec$mode == "regression") {
     ggplot2::ggplot(effect_tbl) +
     ggplot2::geom_bar(ggplot2::aes(x = !!feature_name, weight = .mean_pred)) +
+    ggplot2::labs(title = title, subtitle = subtitle) +
     ggplot2::ylab("Prediction")
   } else if (feature_class == "factor" & object$spec$mode == "classification") {
     ggplot2::ggplot(effect_tbl) +
     ggplot2::geom_bar(ggplot2::aes(x = !!feature_name, weight = .mean_pred)) +
+    ggplot2::labs(title = title, subtitle = subtitle) +
     ggplot2::ylab("Prediction") +
     ggplot2::ylim(0, 1)
   }

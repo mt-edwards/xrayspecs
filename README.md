@@ -87,8 +87,14 @@ along with the data set (`mtcars`) and the name of the target variable
 ``` r
 library(cowplot)
 
-p1 <- rf %>% importance_plot(mtcars, mpg) + ggtitle("Random Forest")
-p2 <- lr %>% importance_plot(mtcars, mpg) + ggtitle("Linear Regression")
+# Random forest
+p1 <- rf %>% 
+  importance_plot(mtcars, mpg, subtitle = "Random Forest")
+
+# Linear regression
+p2 <- lr %>% 
+  importance_plot(mtcars, mpg, subtitle = "Linear Regression")
+
 plot_grid(p1, p2)
 ```
 
@@ -107,8 +113,9 @@ packages are used to display for effect plots for the four most
 ``` r
 library(purrr)
 
-feature_names <- c("wt", "disp", "hp", "cyl")
-rf_plots <- map(feature_names, effect_plot, object = rf, new_data = mtcars)
+# Random forest
+rf_feature_names <- c("disp", "wt", "hp", "cyl")
+rf_plots <- map(rf_feature_names, effect_plot, object = rf, new_data = mtcars, title = NULL)
 plot_grid(plotlist = rf_plots)
 ```
 
@@ -117,11 +124,12 @@ plot_grid(plotlist = rf_plots)
 Note that effect of the `disp` variable is reversed in the linear
 regression model. This is because the random forest captures
 interactions between the features of the model whereas the linear
-regression model does
-not.
+regression model does not.
 
 ``` r
-lr_plots <- map(feature_names, effect_plot, object = lr, new_data = mtcars)
+# Linear regression
+lr_feature_names <- c("hp", "wt", "disp", "carb")
+lr_plots <- map(lr_feature_names, effect_plot, object = lr, new_data = mtcars, title = NULL)
 plot_grid(plotlist = lr_plots)
 ```
 
