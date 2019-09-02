@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of xrayspecs is to do model-agnostic iterpretation of black-box models.
+The goal of xrayspecs is to display model-agnostic iterpretations of black-box models.
 
 ## Installation
 
@@ -35,7 +35,7 @@ library(xrayspecs)
 
 ### Data set
 
-The `mtcars` data set is used for this example. The `dplyr` package is used to transform the categorical features (`cyl`, `vs`, `am`, `gear` and `carb`) to factors. The trasformation is required so that the `effect_plot` function, from the `xrayspecs` package, knows how to plot the feature effects. For example, the effect of numeric features are displayed with line plots and the effect of factor features are displayed with bar plots.
+The `mtcars` data set is used for this example. The `dplyr` package is used to transform the categorical features (`cyl`, `vs`, `am`, `gear` and `carb`) to factors. The trasformation is required so that the `effect_plot` function, from the `xrayspecs` package, knows how to plot the feature effects. For example, the effect of continuous features are displayed with line plots and the effect of categorical features are displayed with bar plots.
 
 ```{r message=FALSE, warning=FALSE}
 library(dplyr)
@@ -52,7 +52,7 @@ mtcars <- mtcars %>%
 
 ### Random forest and linear regression models
 
-A random forest and a linear regression model is fit to the `mtcars` data set using the `parsnip` package. The `parsnip` package provides a unified framework for fitting models in `R`. The models that are available for fitting in `parsnip` are listed [here](https://tidymodels.github.io/parsnip/articles/articles/Models.html). The `xrayspecs` package is designed to integrate into the `parsnip` package framework.
+A [random forest](https://en.wikipedia.org/wiki/Random_forest) and a [linear regression](https://en.wikipedia.org/wiki/Linear_regression) model is fit to the `mtcars` data set using the `parsnip` package. The `parsnip` package provides a unified framework for fitting models in `R`. The models that are available for fitting in `parsnip` are listed [here](https://tidymodels.github.io/parsnip/articles/articles/Models.html). The `xrayspecs` package is designed to integrate into the `parsnip` package's unified framework.
 
 ```{r message=FALSE, warning=FALSE}
 library(parsnip)
@@ -70,31 +70,31 @@ lr <- linear_reg() %>%
 
 ### Permutation importance plot
 
-To display a permutation importance plot of the random forest and linear regression features all you need to do is pipe the `rf` and `lr` objects into the `importance_plot` function along with the data set (`mtcars`) and the name of the target variable (`mpg`). Multiple plots are displayed using the `cowplot` package.
+To display a [permutation importance](https://christophm.github.io/interpretable-ml-book/feature-importance.html) plot of the random forest and linear regression features all you need to do is pipe the `rf` and `lr` objects into the `importance_plot` function along with the data set (`mtcars`) and the name of the target variable (`mpg`). Multiple plots are displayed using the `cowplot` package.
 
 ```{r message=FALSE, warning=FALSE}
 library(cowplot)
 
-p1 <- rf %>% importance_plot(mtcars, mpg)
-p2 <- lr %>% importance_plot(mtcars, mpg)
-plot_grid(p1, p2, labels = c("Random Forest Feature Importances", "Linear Regression Feature Importances"))
+p1 <- rf %>% importance_plot(mtcars, mpg) + ggtitle("Random Forest")
+p2 <- lr %>% importance_plot(mtcars, mpg) + ggtitle("Linear Regression")
+plot_grid(p1, p2)
 ```
 
 ### Partial dependence effect plot
 
-To display a partial dependence effect plot of a random forest feature all you need to do is pipe the `rf` object into the `effect_plot` function along with the data set (`mtcars`) and the name of the feature. Here the `purrr` and `cowplot` packages are used to display for effect plots for the four most "important" features (`disp`, `wt`, `hp` and `cyl`)
+To display a [partial dependence effect](https://christophm.github.io/interpretable-ml-book/pdp.html) plot of a random forest feature all you need to do is pipe the `rf` object into the `effect_plot` function along with the data set (`mtcars`) and the name of the feature. Here the `purrr` and `cowplot` packages are used to display for effect plots for the four most "important" features (`disp`, `wt`, `hp` and `cyl`)
 
 ```{r message=FALSE, warning=FALSE}
 library(purrr)
 
 feature_names <- c("wt", "disp", "hp", "cyl")
 rf_plots <- map(feature_names, effect_plot, object = rf, new_data = mtcars)
-plot_grid(plotlist = rf_plots, labels = "Random Forest Feature Effects")
+plot_grid(plotlist = rf_plots)
 ```
 
 Note that effect of the `disp` variable is reversed in the linear regression model. This is because the random forest captures interactions between the features of the model whereas the linear regression model does not. 
 
 ```{r}
 lr_plots <- map(feature_names, effect_plot, object = lr, new_data = mtcars)
-plot_grid(plotlist = lr_plots, labels = "Linear Regression Feature Effects")
+plot_grid(plotlist = lr_plots)
 ```

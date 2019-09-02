@@ -31,6 +31,9 @@ object_metric <- function(object, new_data, target_name) {
 
 #' Importance Data
 #'
+#' The importance_data function generates a data frame of permutation importance
+#' values for each of the features in new_data.
+#'
 #' @param object object
 #' @param new_data new_data
 #' @param target_name target_name
@@ -50,6 +53,9 @@ importance_data <- function(object, new_data, target_name) {
 }
 
 #' Importance Plot
+#'
+#' The importance_plot function generates a plot of permutation importance
+#' values for each of the features in new_data.
 #'
 #' @param object object
 #' @param new_data new_data

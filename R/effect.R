@@ -41,6 +41,9 @@ mean_predict <- function(object, new_data) {
 
 #' Effect Data
 #'
+#' The effect_data function generates a data frame of prediction effects from new_data that
+#' correspond to changes in the values of feature_name.
+#'
 #' @param object object
 #' @param new_data new_data
 #' @param feature_name feature_name
@@ -58,6 +61,9 @@ effect_data <- function(object, new_data, feature_name) {
 }
 
 #' Effect Plot
+#'
+#' The effect_plot function generates a plot of prediction effects from new_data that
+#' correspond to changes in the values of feature_name.
 #'
 #' @param object object
 #' @param new_data new_data
