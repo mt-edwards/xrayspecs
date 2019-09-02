@@ -21,3 +21,7 @@ Imports:
     forcats
 URL: https://github.com/mt-edwards/xrayspecs
 BugReports: https://github.com/mt-edwards/xrayspecs/issues
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
