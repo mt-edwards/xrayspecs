@@ -48,10 +48,10 @@ object_metric <- function(object, data, target_name) {
 importance <- function(object, data, target_name) {
   target_name <- ensym(target_name)
   metric <- object_metric(object, data, !!target_name)
-  feature_names <- names(dplyr::select(data, -!!target_name))
-  purrr::map(feature_names, feature_permutation, data = data) %>%
+  predictor_names <- names(dplyr::select(data, -!!target_name))
+  purrr::map(predictor_names, feature_permutation, data = data) %>%
     purrr::map_dfr(object_metric, object = object, target_name = !!target_name) %>%
-    dplyr::bind_cols(feature = feature_names) %>%
+    dplyr::bind_cols(predictor = predictor_names) %>%
     dplyr::mutate(.estimate = abs(.estimate - metric$.estimate))
 }
 
@@ -68,7 +68,7 @@ importance <- function(object, data, target_name) {
 importance_plot <- function(object, data, target_name) {
   importance(object, data, !!ensym(target_name)) %>%
     ggplot2::ggplot() +
-    ggplot2::geom_bar(ggplot2::aes(x = forcats::fct_reorder(feature, .estimate, .desc = TRUE), weight = .estimate)) +
-    ggplot2::xlab("Features") +
+    ggplot2::geom_bar(ggplot2::aes(x = forcats::fct_reorder(predictor, .estimate, .desc = TRUE), weight = .estimate)) +
+    ggplot2::xlab("Predictors") +
     ggplot2::ylab(dplyr::if_else(object$spec$mode == "regression", "Root Mean Square Error Drop", "Accuracy Drop"))
 }
