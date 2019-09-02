@@ -4,9 +4,6 @@
 #' @param feature_name feature_name
 #'
 #' @return
-#' @export
-#'
-#' @examples
 feature_permutation <- function(data, feature_name) {
   feature_name <- ensym(feature_name)
   dplyr::mutate(data, !!feature_name := sample(!!feature_name))
@@ -19,9 +16,6 @@ feature_permutation <- function(data, feature_name) {
 #' @param target_name target_name
 #'
 #' @return
-#' @export
-#'
-#' @examples
 object_metric <- function(object, data, target_name) {
   target_name <- ensym(target_name)
   if (object$spec$mode == "regression") {

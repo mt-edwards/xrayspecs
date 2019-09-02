@@ -4,9 +4,6 @@
 #' @param len len
 #'
 #' @return
-#' @export
-#'
-#' @examples
 feature_seq <- function(feature, len = 100) {
   if (class(feature) == "numeric") {
     seq(min(feature), max(feature), length.out = len)
@@ -22,9 +19,6 @@ feature_seq <- function(feature, len = 100) {
 #' @param feature_value feature_value
 #'
 #' @return
-#' @export
-#'
-#' @examples
 feature_replace <- function(data, feature_name, feature_value) {
   dplyr::mutate(data, !!ensym(feature_name) := feature_value)
 }
@@ -35,9 +29,6 @@ feature_replace <- function(data, feature_name, feature_value) {
 #' @param data data
 #'
 #' @return
-#' @export
-#'
-#' @examples
 mean_predict <- function(object, data) {
   if (object$spec$mode == "regression") {
     parsnip::predict.model_fit(object, data) %>%
