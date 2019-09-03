@@ -4,14 +4,12 @@
 \alias{object_metric}
 \title{Object Metric}
 \usage{
-object_metric(object, new_data, target_name)
+object_metric(object, new_data)
 }
 \arguments{
 \item{object}{object}
 
 \item{new_data}{new_data}
-
-\item{target_name}{target_name}
 }
 \description{
 Object Metric

@@ -31,11 +31,11 @@ library(xrayspecs)
 
 The `mtcars` data set is used for this example. The `dplyr` package is
 used to transform the categorical features (`cyl`, `vs`, `am`, `gear`
-and `carb`) to factors. The trasformation is required so that the
-`dependence_plot` function, from the `xrayspecs` package, knows how to
-plot the feature effects. For example, the effect of continuous features
-are displayed with line plots and the effect of categorical features are
-displayed with bar plots.
+and `carb`) to factors. These trasformations are required so that the
+`dependence_plot` function knows how to plot the feature predictions.
+For example, the predictions of continuous features are displayed with
+line plots and the predictions of categorical features are displayed
+with bar plots.
 
 ``` r
 library(dplyr)
@@ -81,19 +81,19 @@ To display a [permutation
 importance](https://christophm.github.io/interpretable-ml-book/feature-importance.html)
 plot of the random forest and linear regression features all you need to
 do is pipe the `rf` and `lr` objects into the `importance_plot` function
-along with the data set (`mtcars`) and the name of the target variable
-(`mpg`). Multiple plots are displayed using the `cowplot` package.
+along with the data set (`mtcars`). Multiple plots are displayed using
+the `cowplot` package.
 
 ``` r
 library(cowplot)
 
 # Random forest
 p1 <- rf %>% 
-  importance_plot(mtcars, mpg, subtitle = "Random Forest")
+  importance_plot(mtcars, subtitle = "Random Forest")
 
 # Linear regression
 p2 <- lr %>% 
-  importance_plot(mtcars, mpg, subtitle = "Linear Regression")
+  importance_plot(mtcars, subtitle = "Linear Regression")
 
 plot_grid(p1, p2)
 ```

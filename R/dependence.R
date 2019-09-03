@@ -26,16 +26,16 @@ feature_replace <- function(new_data, feature_name, feature_value) {
 #'
 #' @param object object
 #' @param new_data new_data
+#' @param class class
 #'
 #' @return
-mean_predict <- function(object, new_data) {
+mean_predict <- function(object, new_data, class) {
   if (object$spec$mode == "regression") {
     parsnip::predict.model_fit(object, new_data) %>%
       dplyr::summarise(.mean_pred = mean(.pred))
-  } else if (object$spec$mode == "classification") {
+  } else {
     predict(object, new_data, type = "prob") %>%
-      dplyr::rename(.pred = dplyr::first(names(.))) %>%
-      dplyr::summarise(.mean_pred = mean(.pred))
+      dplyr::summarise(.mean_pred = mean(names(.)[class]))
   }
 }
 
@@ -47,16 +47,17 @@ mean_predict <- function(object, new_data) {
 #' @param object object
 #' @param new_data new_data
 #' @param feature_name feature_name
+#' @param class class
 #'
 #' @return
 #' @export
 #'
 #' @examples
-dependence_data <- function(object, new_data, feature_name) {
+dependence_data <- function(object, new_data, feature_name, class) {
   feature_name <- ensym(feature_name)
   feature_values <- feature_seq(dplyr::pull(new_data, !!feature_name))
   purrr::map(feature_values, feature_replace, new_data = new_data, feature_name = !!feature_name) %>%
-    purrr::map_dfr(mean_predict, object = object) %>%
+    purrr::map_dfr(mean_predict, object = object, class = class) %>%
     dplyr::bind_cols(!!feature_name := feature_values)
 }
 
@@ -68,6 +69,7 @@ dependence_data <- function(object, new_data, feature_name) {
 #' @param object object
 #' @param new_data new_data
 #' @param feature_name feature_name
+#' @param class class
 #' @param title title
 #' @param subtitle subtitle
 #'
@@ -75,10 +77,10 @@ dependence_data <- function(object, new_data, feature_name) {
 #' @export
 #'
 #' @examples
-dependence_plot <- function(object, new_data, feature_name, title = "Partial Dependence Plot", subtitle = NULL) {
+dependence_plot <- function(object, new_data, feature_name, class = 1, title = "Partial Dependence Plot", subtitle = NULL) {
   feature_name <- ensym(feature_name)
   feature_class <- class(dplyr::pull(new_data, !!feature_name))
-  p <- ggplot2::ggplot(dependence_data(object, new_data, !!feature_name))
+  p <- ggplot2::ggplot(dependence_data(object, new_data, !!feature_name, class))
   if (feature_class == "numeric") {
     p <- p +
       ggplot2::geom_line(ggplot2::aes(x = !!feature_name, y = .mean_pred)) +
@@ -91,10 +93,11 @@ dependence_plot <- function(object, new_data, feature_name, title = "Partial Dep
   if (object$spec$mode == "regression") {
     p <- p +
       ggplot2::ylab("Predicted Target")
-  } else if (object$spec$mode == "classification") {
+  } else {
     p <- p +
-      ggplot2::ylab("Predicted Probability (class one)") +
+      ggplot2::ylab("Predicted Probability") +
       ggplot2::ylim(0, 1)
   }
-  p + ggplot2::labs(title = title, subtitle = subtitle) + ggplot2::theme_grey()
+  p + ggplot2::labs(title = title, subtitle = subtitle) +
+      ggplot2::theme_grey()
 }

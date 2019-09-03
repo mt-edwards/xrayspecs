@@ -4,15 +4,13 @@
 \alias{importance_plot}
 \title{Importance Plot}
 \usage{
-importance_plot(object, new_data, target_name,
-  title = "Permutation Importance Plot", subtitle = NULL)
+importance_plot(object, new_data, title = "Permutation Importance Plot",
+  subtitle = NULL)
 }
 \arguments{
 \item{object}{object}
 
 \item{new_data}{new_data}
-
-\item{target_name}{target_name}
 
 \item{title}{title}
 

@@ -4,14 +4,12 @@
 \alias{importance_data}
 \title{Importance Data}
 \usage{
-importance_data(object, new_data, target_name)
+importance_data(object, new_data)
 }
 \arguments{
 \item{object}{object}
 
 \item{new_data}{new_data}
-
-\item{target_name}{target_name}
 }
 \description{
 The importance_data function generates a data frame of permutation importance

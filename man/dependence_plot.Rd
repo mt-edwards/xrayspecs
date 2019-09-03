@@ -4,7 +4,7 @@
 \alias{dependence_plot}
 \title{Dependence Plot}
 \usage{
-dependence_plot(object, new_data, feature_name,
+dependence_plot(object, new_data, feature_name, class = 1,
   title = "Partial Dependence Plot", subtitle = NULL)
 }
 \arguments{
@@ -13,6 +13,8 @@ dependence_plot(object, new_data, feature_name,
 \item{new_data}{new_data}
 
 \item{feature_name}{feature_name}
+
+\item{class}{class}
 
 \item{title}{title}
 

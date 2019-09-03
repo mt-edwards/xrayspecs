@@ -4,7 +4,7 @@
 \alias{dependence_data}
 \title{Dependence Data}
 \usage{
-dependence_data(object, new_data, feature_name)
+dependence_data(object, new_data, feature_name, class)
 }
 \arguments{
 \item{object}{object}
@@ -12,6 +12,8 @@ dependence_data(object, new_data, feature_name)
 \item{new_data}{new_data}
 
 \item{feature_name}{feature_name}
+
+\item{class}{class}
 }
 \description{
 The dependence_data function generates a data frame of predictions from new_data that
