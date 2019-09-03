@@ -4,7 +4,8 @@
 \alias{importance_plot}
 \title{Importance Plot}
 \usage{
-importance_plot(object, new_data, target_name)
+importance_plot(object, new_data, target_name,
+  title = "Permutation Importance Plot", subtitle = NULL)
 }
 \arguments{
 \item{object}{object}
@@ -12,7 +13,12 @@ importance_plot(object, new_data, target_name)
 \item{new_data}{new_data}
 
 \item{target_name}{target_name}
+
+\item{title}{title}
+
+\item{subtitle}{subtitle}
 }
 \description{
-Importance Plot
+The importance_plot function generates a plot of permutation importance
+values for each of the features in new_data.
 }

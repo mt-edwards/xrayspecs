@@ -14,5 +14,6 @@ importance_data(object, new_data, target_name)
 \item{target_name}{target_name}
 }
 \description{
-Importance Data
+The importance_data function generates a data frame of permutation importance
+values for each of the features in new_data.
 }

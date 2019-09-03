@@ -21,7 +21,7 @@ object_metric <- function(object, new_data, target_name) {
   if (object$spec$mode == "regression") {
     parsnip::predict.model_fit(object, new_data) %>%
       dplyr::bind_cols(new_data) %>%
-      yardstick::rmse(truth = !!target_name, estimate = .pred)
+      yardstick::mae(truth = !!target_name, estimate = .pred)
   } else if (object$spec$mode == "classification") {
     parsnip::predict.model_fit(object, new_data) %>%
       dplyr::bind_cols(new_data) %>%
@@ -60,6 +60,8 @@ importance_data <- function(object, new_data, target_name) {
 #' @param object object
 #' @param new_data new_data
 #' @param target_name target_name
+#' @param title title
+#' @param subtitle subtitle
 #'
 #' @return
 #' @export
@@ -68,9 +70,10 @@ importance_data <- function(object, new_data, target_name) {
 importance_plot <- function(object, new_data, target_name,  title = "Permutation Importance Plot", subtitle = NULL) {
   importance_data(object, new_data, !!ensym(target_name)) %>%
     ggplot2::ggplot() +
-    ggplot2::geom_bar(ggplot2::aes(x = forcats::fct_reorder(feature, .estimate, .desc = TRUE), weight = .estimate)) +
+    ggplot2::geom_bar(ggplot2::aes(x = forcats::fct_reorder(feature, .estimate), weight = .estimate)) +
     ggplot2::coord_flip() +
     ggplot2::labs(title = title, subtitle = subtitle) +
     ggplot2::xlab("Features") +
-    ggplot2::ylab(dplyr::if_else(object$spec$mode == "regression", "Root Mean Square Error Loss", "Accuracy Loss"))
+    ggplot2::ylab(dplyr::if_else(object$spec$mode == "regression", "Importance (MAE)", "Importance (accuracy)")) +
+    ggplot2::theme_grey()
 }
