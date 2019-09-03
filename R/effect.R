@@ -73,7 +73,7 @@ effect_data <- function(object, new_data, feature_name) {
 #' @export
 #'
 #' @examples
-effect_plot <- function(object, new_data, feature_name, title = "Effect Plot", subtitle = NULL) {
+effect_plot <- function(object, new_data, feature_name, title = "Partial Dependence Plot", subtitle = NULL) {
   feature_name <- ensym(feature_name)
   feature_class <- class(dplyr::pull(new_data, !!feature_name))
   effect_tbl <- effect_data(object, new_data, !!feature_name)

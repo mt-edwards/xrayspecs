@@ -65,7 +65,7 @@ importance_data <- function(object, new_data, target_name) {
 #' @export
 #'
 #' @examples
-importance_plot <- function(object, new_data, target_name,  title = "Importance Plot", subtitle = NULL) {
+importance_plot <- function(object, new_data, target_name,  title = "Permutation Importance Plot", subtitle = NULL) {
   importance_data(object, new_data, !!ensym(target_name)) %>%
     ggplot2::ggplot() +
     ggplot2::geom_bar(ggplot2::aes(x = forcats::fct_reorder(feature, .estimate, .desc = TRUE), weight = .estimate)) +
