@@ -8,17 +8,17 @@ dependence_plot(object, new_data, feature_name, class = 1,
   title = "Partial Dependence Plot", subtitle = NULL)
 }
 \arguments{
-\item{object}{object}
+\item{object}{An object of class model_fit.}
 
-\item{new_data}{new_data}
+\item{new_data}{A rectangular data object, such as a data frame.}
 
-\item{feature_name}{feature_name}
+\item{feature_name}{A feature name.}
 
-\item{class}{class}
+\item{class}{A class probability to predict.}
 
-\item{title}{title}
+\item{title}{A character string for the title.}
 
-\item{subtitle}{subtitle}
+\item{subtitle}{A character string for the subtitle displayed under the title.}
 }
 \description{
 The dependence_plot function generates a plot of predictions from new_data that

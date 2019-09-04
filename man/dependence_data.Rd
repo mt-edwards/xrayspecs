@@ -7,13 +7,13 @@
 dependence_data(object, new_data, feature_name, class)
 }
 \arguments{
-\item{object}{object}
+\item{object}{An object of class model_fit.}
 
-\item{new_data}{new_data}
+\item{new_data}{A rectangular data object, such as a data frame.}
 
-\item{feature_name}{feature_name}
+\item{feature_name}{A feature name.}
 
-\item{class}{class}
+\item{class}{A class probability to predict.}
 }
 \description{
 The dependence_data function generates a data frame of predictions from new_data that

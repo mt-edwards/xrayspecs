@@ -89,11 +89,13 @@ library(cowplot)
 
 # Random forest
 p1 <- rf %>% 
-  importance_plot(mtcars, subtitle = "Random Forest")
+  importance_plot(mtcars) +
+  labs(subtitle = "Random Forest")
 
 # Linear regression
 p2 <- lr %>% 
-  importance_plot(mtcars, subtitle = "Linear Regression")
+  importance_plot(mtcars) +
+  labs(subtitle = "Linear Regression")
 
 plot_grid(p1, p2)
 ```
@@ -113,11 +115,13 @@ and `cyl`) are displayed.
 ``` r
 # Random forest
 p1 <- rf %>% 
-  dependence_plot(mtcars, wt, subtitle = "Random Forest")
+  dependence_plot(mtcars, wt) +
+  labs(subtitle = "Random Forest")
 
 # Linear regression
 p2 <- lr %>% 
-  dependence_plot(mtcars, wt, subtitle = "Linear Regression")
+  dependence_plot(mtcars, wt) +
+  labs(subtitle = "Linear Regression")
 
 plot_grid(p1, p2)
 ```
@@ -127,11 +131,13 @@ plot_grid(p1, p2)
 ``` r
 # Random forest
 p1 <- rf %>% 
-  dependence_plot(mtcars, cyl, subtitle = "Random Forest")
+  dependence_plot(mtcars, cyl) +
+  labs(subtitle = "Random Forest")
 
 # Linear regression
 p2 <- lr %>% 
-  dependence_plot(mtcars, cyl, subtitle = "Linear Regression")
+  dependence_plot(mtcars, cyl) +
+  labs(subtitle = "Linear Regression")
 
 plot_grid(p1, p2)
 ```

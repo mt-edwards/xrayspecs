@@ -7,11 +7,11 @@
 mean_predict(object, new_data, class)
 }
 \arguments{
-\item{object}{object}
+\item{object}{An object of class model_fit with mode "regression" or "classification".}
 
-\item{new_data}{new_data}
+\item{new_data}{A rectangular data object, such as a data frame.}
 
-\item{class}{class}
+\item{class}{A class probability to predict.}
 }
 \description{
 Mean Predict

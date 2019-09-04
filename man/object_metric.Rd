@@ -7,9 +7,9 @@
 object_metric(object, new_data)
 }
 \arguments{
-\item{object}{object}
+\item{object}{An object of class model_fit.}
 
-\item{new_data}{new_data}
+\item{new_data}{A rectangular data object, such as a data frame.}
 }
 \description{
 Object Metric

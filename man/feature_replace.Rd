@@ -7,11 +7,11 @@
 feature_replace(new_data, feature_name, feature_value)
 }
 \arguments{
-\item{new_data}{new_data}
+\item{new_data}{A rectangular data object, such as a data frame.}
 
-\item{feature_name}{feature_name}
+\item{feature_name}{A feature name.}
 
-\item{feature_value}{feature_value}
+\item{feature_value}{A feature value of class numeric or factor.}
 }
 \description{
 Feature Replace

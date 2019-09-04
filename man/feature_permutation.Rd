@@ -7,9 +7,9 @@
 feature_permutation(new_data, feature_name)
 }
 \arguments{
-\item{new_data}{new_data}
+\item{new_data}{A rectangular data object, such as a data frame.}
 
-\item{feature_name}{feature_name}
+\item{feature_name}{A feature name.}
 }
 \description{
 Feature Permutation

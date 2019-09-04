@@ -8,13 +8,13 @@ importance_plot(object, new_data, title = "Permutation Importance Plot",
   subtitle = NULL)
 }
 \arguments{
-\item{object}{object}
+\item{object}{An object of class model_fit.}
 
-\item{new_data}{new_data}
+\item{new_data}{A rectangular data object, such as a data frame.}
 
-\item{title}{title}
+\item{title}{A character string for the title.}
 
-\item{subtitle}{subtitle}
+\item{subtitle}{A character string for the subtitle displayed under the title.}
 }
 \description{
 The importance_plot function generates a plot of permutation importance

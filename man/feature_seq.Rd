@@ -7,7 +7,7 @@
 feature_seq(feature)
 }
 \arguments{
-\item{feature}{feature}
+\item{feature}{A feature vector of class numeric or factor.}
 }
 \description{
 Feature Sequence
