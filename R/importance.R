@@ -16,14 +16,12 @@ feature_permutation <- function(new_data, feature_name) {
 #'
 #' @return
 object_metric <- function(object, new_data) {
+  pred_data <- parsnip::predict.model_fit(object, new_data) %>%
+    dplyr::bind_cols(new_data)
   if (object$spec$mode == "regression") {
-    parsnip::predict.model_fit(object, new_data) %>%
-      dplyr::bind_cols(new_data) %>%
-      yardstick::mae(truth = !!sym(object$preproc$y_var), estimate = .pred)
-  } else (object$spec$mode == "classification") {
-    parsnip::predict.model_fit(object, new_data) %>%
-      dplyr::bind_cols(new_data) %>%
-      yardstick::accuracy(truth = !!sym(object$preproc$y_var), estimate = .pred_class)
+    yardstick::mae(pred_data, truth = !!sym(object$preproc$y_var), estimate = .pred)
+  } else if (object$spec$mode == "classification") {
+    yardstick::accuracy(pred_data, truth = !!sym(object$preproc$y_var), estimate = .pred_class)
   } else {
     stop("Invalid `object` mode")
   }

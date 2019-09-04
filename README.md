@@ -7,8 +7,9 @@
 
 <!-- badges: end -->
 
-The goal of xrayspecs is to display model-agnostic iterpretations of
-black-box models.
+The `xrayspecs` package provides model-agnostic interpretations of
+black-box models. The package is designed to integrate into the
+`parsnip` package’s unified modelling framework.
 
 ## Installation
 
@@ -108,9 +109,9 @@ To display a [partial
 dependence](https://christophm.github.io/interpretable-ml-book/pdp.html)
 plot of a random forest feature all you need to do is pipe the `rf`
 object into the `dependence_plot` function along with the data set
-(`mtcars`) and the name of the feature. Here the the partial dependece
-plots of the most “important” continuous and categorical features (`wt`
-and `cyl`) are displayed.
+(`mtcars`) and the name of the feature. Here the partial dependece plots
+of the most “important” continuous and categorical features (`wt` and
+`cyl`) are displayed.
 
 ``` r
 # Random forest
