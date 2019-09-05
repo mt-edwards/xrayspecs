@@ -18,7 +18,8 @@ Imports:
     magrittr,
     parsnip,
     yardstick,
-    forcats
+    forcats,
+    glue
 URL: https://github.com/mt-edwards/xrayspecs
 BugReports: https://github.com/mt-edwards/xrayspecs/issues
 Suggests: 
