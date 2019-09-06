@@ -5,7 +5,7 @@
 #'
 #' @return
 permute_feature <- function(data, feature) {
-  dplyr::mutate(data, {{ feature }} := sample(!!sym(feature)))
+  dplyr::mutate(data, {{feature}} := sample({{feature}}))
 }
 
 #' Estimate Metric
@@ -19,29 +19,34 @@ permute_feature <- function(data, feature) {
 estimate_metric <- function(object, data, target, metric) {
   parsnip::predict.model_fit(object, data) %>%
     dplyr::bind_cols(data) %>%
-    metric(truth = {{ target }}, estimate = dplyr::first(.)) %>%
-    dplyr::select(.metric, .estimate)
+    metric(truth = {{target}}, estimate = dplyr::first(.)) %>%
+    dplyr::select(.estimate)
 }
 
 #' Estimate Importance
 #'
 #' @param object An object of class `model_fit`.
 #' @param data A rectangular data object, such as a data frame.
+#' @param feature A feature variable.
 #' @param target The target variable.
 #' @param metric A metric funtion from the `yardstick` package.
+#' @param sample_size The sample size used to estimate importance mean and 95% CI.
 #'
 #' @return
 #' @export
 #'
 #' @examples
-estimate_importance <- function(object, data, target, metric) {
-  metric_data <- estimate_metric(object, data, {{ target }}, metric)
-  features <- names(dplyr::select(data, -{{ target }}))
-  purrr::map(features, permute_feature, data = data) %>%
-    purrr::map_dfr(estimate_metric, object = object, target = {{ target }}, metric = metric) %>%
-    dplyr::bind_cols(.feature = features) %>%
+estimate_importance <- function(object, data, feature, target, metric, sample_size) {
+  metric_data <- estimate_metric(object, data, {{target}}, metric)
+  purrr::map(seq_len(sample_size), ~ permute_feature(data, {{feature}})) %>%
+    purrr::map_dfr(estimate_metric, object = object, target = {{target}}, metric = metric) %>%
     dplyr::mutate(.importance = abs(.estimate - metric_data$.estimate)) %>%
-    dplyr::select(.metric, .feature, .importance)
+    dplyr::summarise(
+      .feature = rlang::as_string(ensym(feature)),
+      .lower = quantile(.importance, prob = 0.025),
+      .mean = mean(.importance),
+      .upper = quantile(.importance, prob = 0.975)
+    )
 }
 
 #' Plot Importance
@@ -50,20 +55,22 @@ estimate_importance <- function(object, data, target, metric) {
 #' @param data A rectangular data object, such as a data frame.
 #' @param target The target variable.
 #' @param metric A metric funtion from the `yardstick` package.
+#' @param sample_size The sample size used to estimate importance mean and 95% CI.
 #' @param title A character string for the title.
 #'
 #' @return
 #' @export
 #'
 #' @examples
-plot_importance <- function(object, data, target, metric, title = "Permutation Importance Plot") {
-  importance_data <- estimate_importance(object, data, {{ target }}, metric)
-  metric_name <- importance_data$.metric[[1]]
-  ggplot2::ggplot(importance_data) +
-    ggplot2::geom_bar(ggplot2::aes(x = forcats::fct_reorder(.feature, .importance), weight = .importance)) +
+plot_importance <- function(object, data, target, metric, sample_size = 100, title = "Permutation Importance Plot") {
+  features <- syms(names(dplyr::select(data, -{{target}})))
+  purrr::map_dfr(features, estimate_importance, object = object, data = data, target = {{target}}, metric = metric, sample_size = sample_size) %>%
+    ggplot2::ggplot(ggplot2::aes(x = forcats::fct_reorder(.feature, .mean), y = .mean)) +
+    ggplot2::geom_linerange(ggplot2::aes(ymin = .lower, ymax = .upper), col = "grey", size = 2) +
+    ggplot2::geom_point(size = 2) +
     ggplot2::coord_flip() +
     ggplot2::labs(title = title) +
     ggplot2::xlab("Feature") +
-    ggplot2::ylab(glue::glue('Importance ({ metric_name })')) +
+    ggplot2::ylab("Importance") +
     ggplot2::theme_grey()
 }

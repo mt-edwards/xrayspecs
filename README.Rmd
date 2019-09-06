@@ -75,6 +75,7 @@ To display a [permutation importance](https://christophm.github.io/interpretable
 
 ```{r message=FALSE, warning=FALSE}
 library(yardstick)
+library(ggplot2)
 library(cowplot)
 
 # Random forest

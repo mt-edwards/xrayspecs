@@ -83,7 +83,7 @@ importance](https://christophm.github.io/interpretable-ml-book/feature-importanc
 plot of the random forest and linear regression features all you need to
 do is pipe the `rf` and `lr` objects into the `plot_importance` function
 along with the data (`mtcars`) the target (`mpg`) and a metric from the
-`yardstick` package, e.g. `mae` (Mean Absolute Error). Multiple plots
+`yardstick` package, e.g. `mae` (Mean Absolute Error). Multiple plots
 are displayed using the `cowplot` package. A feature importance is equal
 to the absolute difference between the metric estimates when the feature
 is and is not permuted in the data. **Note**: metrics must be
@@ -91,6 +91,7 @@ appropriate for the target variable.
 
 ``` r
 library(yardstick)
+library(ggplot2)
 library(cowplot)
 
 # Random forest
