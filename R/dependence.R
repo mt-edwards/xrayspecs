@@ -20,7 +20,7 @@ sequence_feature <- function(feature, len) {
 #'
 #' @return
 replace_feature <- function(data, feature, feature_value) {
-  dplyr::mutate(data, {{ feature }} := feature_value)
+  dplyr::mutate(data, {{feature}} := feature_value)
 }
 
 #' Mean Predict
@@ -34,7 +34,7 @@ calculate_mean_prediction <- function(object, data, class) {
   if (object$spec$mode == "regression") {
     parsnip::predict.model_fit(object, data) %>%
       dplyr::summarise(.mean_pred = mean(.pred))
-  } else if (object$spec$mode == "classificatoin") {
+  } else if (object$spec$mode == "classification") {
     parsnip::predict.model_fit(object, data, type = "prob") %>%
       dplyr::summarise(.mean_pred = mean(names(.)[class]))
   } else {
@@ -42,7 +42,7 @@ calculate_mean_prediction <- function(object, data, class) {
   }
 }
 
-#' Dependence Data
+#' Estimate Dependence
 #'
 #' @param object An object of class `model_fit`.
 #' @param data A rectangular data object, such as a data frame.
@@ -55,10 +55,10 @@ calculate_mean_prediction <- function(object, data, class) {
 #'
 #' @examples
 estimate_dependence <- function(object, data, feature, len, class) {
-  feature_values <- sequence_feature(dplyr::pull(data, {{ feature }}), len)
-  purrr::map(feature_values, replace_feature, data = data, feature = {{ feature }}) %>%
+  feature_values <- sequence_feature(dplyr::pull(data, {{feature}}), len)
+  purrr::map(feature_values, replace_feature, data = data, feature = {{feature}}) %>%
     purrr::map_dfr(calculate_mean_prediction, object = object, class = class) %>%
-    dplyr::bind_cols({{ feature }} := feature_values)
+    dplyr::bind_cols({{feature}} := feature_values)
 }
 
 #' Plot Dependence
@@ -74,17 +74,17 @@ estimate_dependence <- function(object, data, feature, len, class) {
 #' @export
 #'
 #' @examples
-plot_dependence <- function(object, data, feature, len = 40, class_prob = 1, title = "Partial Dependence") {
-  feature_class <- class(dplyr::pull(data, {{ feature }}))
-  p <- ggplot2::ggplot(estimate_dependence(object, data, {{ feature }}, len, class))
+plot_dependence <- function(object, data, feature, len = 40, class = 1, title = "Partial Dependence") {
+  feature_class <- class(dplyr::pull(data, {{feature}}))
+  p <- ggplot2::ggplot(estimate_dependence(object, data, {{feature}}, len, class))
   if (feature_class == "numeric") {
     p <- p +
-      ggplot2::geom_line(ggplot2::aes(x = {{ feature }}, y = .mean_pred)) +
-      ggplot2::geom_rug(ggplot2::aes(x = {{ feature }}), data = data)
+      ggplot2::geom_line(ggplot2::aes(x = {{feature}}, y = .mean_pred)) +
+      ggplot2::geom_rug(ggplot2::aes(x = {{feature}}), data = data)
   } else if (feature_class == "factor") {
     p <- p +
-      ggplot2::geom_bar(ggplot2::aes(x = {{ feature }}, weight = .mean_pred)) +
-      ggplot2::geom_rug(ggplot2::aes(x = {{ feature }}, y = 0), data = data, position = "jitter", sides = "b")
+      ggplot2::geom_bar(ggplot2::aes(x = {{feature}}, weight = .mean_pred)) +
+      ggplot2::geom_rug(ggplot2::aes(x = {{feature}}, y = 0), data = data, position = "jitter", sides = "b")
   }
   p + ggplot2::ylab(dplyr::if_else(object$spec$mode == "regression", "Predicted Target", "Predicted Probability")) +
       ggplot2::labs(title = title) +
