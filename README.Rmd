@@ -9,7 +9,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  fig.height=4,
+  fig.height=6,
   out.width = "100%"
 )
 ```
@@ -36,7 +36,7 @@ library(xrayspecs)
 
 ### Data Set
 
-The `mtcars` data set is used for this example. The `dplyr` package is used to transform the categorical features (`cyl`, `vs`, `am`, `gear` and `carb`) to factors. These trasformations are required so that the `dependence_plot` function knows how to plot the feature predictions. For example, the predictions of continuous features are displayed with line plots and the predictions of categorical features are displayed with bar plots.
+The `mtcars` data set is used for this example. The `dplyr` package is used to transform the categorical features (`cyl`, `vs`, `am`, `gear` and `carb`) to factors. These trasformations are required so that the `plot_dependence` function knows how to plot the feature predictions. For example, the predictions of continuous features are displayed with line plots and the predictions of categorical features are displayed with bar plots.
 
 ```{r message=FALSE, warning=FALSE}
 library(dplyr)
@@ -71,54 +71,47 @@ lr <- linear_reg() %>%
 
 ### Permutation Importance Plot
 
-To display a [permutation importance](https://christophm.github.io/interpretable-ml-book/feature-importance.html) plot of the random forest and linear regression features all you need to do is pipe the `rf` and `lr` objects into the `plot_importance` function along with the data (`mtcars`) the target (`mpg`) and a metric from the `yardstick` package, e.g. `mae` (Mean Absolute Error). Multiple plots are displayed using the `cowplot` package. A feature importance is equal to the absolute difference between the metric estimates when the feature is and is not permuted in the data. **Note**: metrics must be appropriate for the target variable.
+To display a [permutation importance](https://christophm.github.io/interpretable-ml-book/feature-importance.html) plot of the random forest and linear regression features all you need to do is pipe the `rf` and `lr` objects into the `plot_importance` function along with the data (`mtcars`) the target (`mpg`) and a metric from the `yardstick` package, e.g. `mae` (Mean Absolute Error). A feature importance is equal to the absolute difference between the metric estimates when the feature is and is not permuted in the data. **Note**: metrics must be appropriate for the target variable.
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, fig.show='hold', out.width='50%'}
 library(yardstick)
 library(ggplot2)
-library(cowplot)
 
 # Random forest
-p1 <- rf %>% 
+rf %>% 
   plot_importance(mtcars, mpg, mae) +
   labs(subtitle = "Random Forest")
 
 # Linear regression
-p2 <- lr %>% 
+lr %>% 
   plot_importance(mtcars, mpg, mae) +
   labs(subtitle = "Linear Regression")
-
-plot_grid(p1, p2)
 ```
 
 ### Partial Dependence Plot
 
-To display a [partial dependence](https://christophm.github.io/interpretable-ml-book/pdp.html) plot of a feature for the random forest and linear regression models all you need to do is pipe the `rf` and `lr` objects into the `dependence_plot` function along with the data (`mtcars`) and the feature. Here the partial dependence plots of the most "important" continuous and categorical features (`wt` and `cyl`) are displayed.
+To display a [partial dependence](https://christophm.github.io/interpretable-ml-book/pdp.html) plot of a feature for the random forest and linear regression models all you need to do is pipe the `rf` and `lr` objects into the `plot_dependence` function along with the data (`mtcars`) and the feature. Here the partial dependence plots of the most "important" continuous and categorical features (`wt` and `cyl`) are displayed.
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, fig.show='hold', out.width='50%'}
 # Random forest
-p1 <- rf %>% 
+rf %>% 
   plot_dependence(mtcars, wt) +
   labs(subtitle = "Random Forest")
 
 # Linear regression
-p2 <- lr %>% 
+lr %>% 
   plot_dependence(mtcars, wt) +
   labs(subtitle = "Linear Regression")
-
-plot_grid(p1, p2)
 ```
 
-```{r}
+```{r message=FALSE, warning=FALSE, fig.show='hold', out.width='50%'}
 # Random forest
-p1 <- rf %>% 
+rf %>% 
   plot_dependence(mtcars, cyl) +
   labs(subtitle = "Random Forest")
 
 # Linear regression
-p2 <- lr %>% 
+lr %>% 
   plot_dependence(mtcars, cyl) +
   labs(subtitle = "Linear Regression")
-
-plot_grid(p1, p2)
 ```

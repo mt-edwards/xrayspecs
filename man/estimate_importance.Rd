@@ -4,16 +4,20 @@
 \alias{estimate_importance}
 \title{Estimate Importance}
 \usage{
-estimate_importance(object, data, target, metric)
+estimate_importance(object, data, feature, target, metric, sample_size)
 }
 \arguments{
 \item{object}{An object of class `model_fit`.}
 
 \item{data}{A rectangular data object, such as a data frame.}
 
+\item{feature}{A feature variable.}
+
 \item{target}{The target variable.}
 
 \item{metric}{A metric funtion from the `yardstick` package.}
+
+\item{sample_size}{The sample size used to estimate mean importance.}
 }
 \description{
 Estimate Importance

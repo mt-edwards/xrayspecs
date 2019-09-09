@@ -4,8 +4,8 @@
 \alias{plot_importance}
 \title{Plot Importance}
 \usage{
-plot_importance(object, data, target, metric,
-  title = "Permutation Importance Plot")
+plot_importance(object, data, target, metric, sample_size = 100,
+  title = "Permutation Importance")
 }
 \arguments{
 \item{object}{An object of class model_fit.}
@@ -15,6 +15,8 @@ plot_importance(object, data, target, metric,
 \item{target}{The target variable.}
 
 \item{metric}{A metric funtion from the `yardstick` package.}
+
+\item{sample_size}{The sample size used to estimate mean importance.}
 
 \item{title}{A character string for the title.}
 }

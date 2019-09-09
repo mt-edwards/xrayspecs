@@ -5,7 +5,7 @@
 \title{Plot Dependence}
 \usage{
 plot_dependence(object, data, feature, len = 40, class_prob = 1,
-  title = "Partial Dependence Plot")
+  title = "Partial Dependence")
 }
 \arguments{
 \item{object}{An object of class `model_fit`.}

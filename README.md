@@ -33,7 +33,7 @@ library(xrayspecs)
 The `mtcars` data set is used for this example. The `dplyr` package is
 used to transform the categorical features (`cyl`, `vs`, `am`, `gear`
 and `carb`) to factors. These trasformations are required so that the
-`dependence_plot` function knows how to plot the feature predictions.
+`plot_dependence` function knows how to plot the feature predictions.
 For example, the predictions of continuous features are displayed with
 line plots and the predictions of categorical features are displayed
 with bar plots.
@@ -83,31 +83,27 @@ importance](https://christophm.github.io/interpretable-ml-book/feature-importanc
 plot of the random forest and linear regression features all you need to
 do is pipe the `rf` and `lr` objects into the `plot_importance` function
 along with the data (`mtcars`) the target (`mpg`) and a metric from the
-`yardstick` package, e.g. `mae` (Mean Absolute Error). Multiple plots
-are displayed using the `cowplot` package. A feature importance is equal
-to the absolute difference between the metric estimates when the feature
-is and is not permuted in the data. **Note**: metrics must be
-appropriate for the target variable.
+`yardstick` package, e.g. `mae` (Mean Absolute Error). A feature
+importance is equal to the absolute difference between the metric
+estimates when the feature is and is not permuted in the data. **Note**:
+metrics must be appropriate for the target variable.
 
 ``` r
 library(yardstick)
 library(ggplot2)
-library(cowplot)
 
 # Random forest
-p1 <- rf %>% 
+rf %>% 
   plot_importance(mtcars, mpg, mae) +
   labs(subtitle = "Random Forest")
 
 # Linear regression
-p2 <- lr %>% 
+lr %>% 
   plot_importance(mtcars, mpg, mae) +
   labs(subtitle = "Linear Regression")
-
-plot_grid(p1, p2)
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="50%" /><img src="man/figures/README-unnamed-chunk-5-2.png" width="50%" />
 
 ### Partial Dependence Plot
 
@@ -115,38 +111,34 @@ To display a [partial
 dependence](https://christophm.github.io/interpretable-ml-book/pdp.html)
 plot of a feature for the random forest and linear regression models all
 you need to do is pipe the `rf` and `lr` objects into the
-`dependence_plot` function along with the data (`mtcars`) and the
+`plot_dependence` function along with the data (`mtcars`) and the
 feature. Here the partial dependence plots of the most “important”
 continuous and categorical features (`wt` and `cyl`) are displayed.
 
 ``` r
 # Random forest
-p1 <- rf %>% 
+rf %>% 
   plot_dependence(mtcars, wt) +
   labs(subtitle = "Random Forest")
 
 # Linear regression
-p2 <- lr %>% 
+lr %>% 
   plot_dependence(mtcars, wt) +
   labs(subtitle = "Linear Regression")
-
-plot_grid(p1, p2)
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-6-1.png" width="50%" /><img src="man/figures/README-unnamed-chunk-6-2.png" width="50%" />
 
 ``` r
 # Random forest
-p1 <- rf %>% 
+rf %>% 
   plot_dependence(mtcars, cyl) +
   labs(subtitle = "Random Forest")
 
 # Linear regression
-p2 <- lr %>% 
+lr %>% 
   plot_dependence(mtcars, cyl) +
   labs(subtitle = "Linear Regression")
-
-plot_grid(p1, p2)
 ```
 
-<img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-7-1.png" width="50%" /><img src="man/figures/README-unnamed-chunk-7-2.png" width="50%" />

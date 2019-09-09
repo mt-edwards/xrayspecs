@@ -74,7 +74,7 @@ estimate_dependence <- function(object, data, feature, len, class) {
 #' @export
 #'
 #' @examples
-plot_dependence <- function(object, data, feature, len = 40, class_prob = 1, title = "Partial Dependence Plot") {
+plot_dependence <- function(object, data, feature, len = 40, class_prob = 1, title = "Partial Dependence") {
   feature_class <- class(dplyr::pull(data, {{ feature }}))
   p <- ggplot2::ggplot(estimate_dependence(object, data, {{ feature }}, len, class))
   if (feature_class == "numeric") {
