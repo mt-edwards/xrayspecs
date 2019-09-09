@@ -30,7 +30,7 @@ estimate_metric <- function(object, data, target, metric) {
 #' @param feature A feature variable.
 #' @param target The target variable.
 #' @param metric A metric funtion from the `yardstick` package.
-#' @param sample_size The sample size used to estimate importance mean and 95% CI.
+#' @param sample_size The sample size used to estimate mean importance.
 #'
 #' @return
 #' @export
@@ -38,14 +38,15 @@ estimate_metric <- function(object, data, target, metric) {
 #' @examples
 estimate_importance <- function(object, data, feature, target, metric, sample_size) {
   metric_data <- estimate_metric(object, data, {{target}}, metric)
-  purrr::map(seq_len(sample_size), ~ permute_feature(data, {{feature}})) %>%
+  seq_len(sample_size) %>%
+    purrr::map(~ permute_feature(data, {{feature}})) %>%
     purrr::map_dfr(estimate_metric, object = object, target = {{target}}, metric = metric) %>%
     dplyr::mutate(.importance = abs(.estimate - metric_data$.estimate)) %>%
     dplyr::summarise(
       .feature = rlang::as_string(ensym(feature)),
-      .lower = quantile(.importance, prob = 0.025),
-      .mean = mean(.importance),
-      .upper = quantile(.importance, prob = 0.975)
+      .lower   = quantile(.importance, prob = 0.025),
+      .mean    = mean(.importance),
+      .upper   = quantile(.importance, prob = 0.975)
     )
 }
 
@@ -55,18 +56,18 @@ estimate_importance <- function(object, data, feature, target, metric, sample_si
 #' @param data A rectangular data object, such as a data frame.
 #' @param target The target variable.
 #' @param metric A metric funtion from the `yardstick` package.
-#' @param sample_size The sample size used to estimate importance mean and 95% CI.
+#' @param sample_size The sample size used to estimate mean importance.
 #' @param title A character string for the title.
 #'
 #' @return
 #' @export
 #'
 #' @examples
-plot_importance <- function(object, data, target, metric, sample_size = 100, title = "Permutation Importance Plot") {
-  features <- syms(names(dplyr::select(data, -{{target}})))
-  purrr::map_dfr(features, estimate_importance, object = object, data = data, target = {{target}}, metric = metric, sample_size = sample_size) %>%
+plot_importance <- function(object, data, target, metric, sample_size = 100, title = "Permutation Importance") {
+  syms(names(dplyr::select(data, -{{target}}))) %>%
+    purrr::map_dfr(estimate_importance, object = object, data = data, target = {{target}}, metric = metric, sample_size = sample_size) %>%
     ggplot2::ggplot(ggplot2::aes(x = forcats::fct_reorder(.feature, .mean), y = .mean)) +
-    ggplot2::geom_linerange(ggplot2::aes(ymin = .lower, ymax = .upper), col = "grey", size = 2) +
+    ggplot2::geom_errorbar(ggplot2::aes(ymin = .lower, ymax = .upper), width = 0.3) +
     ggplot2::geom_point(size = 2) +
     ggplot2::coord_flip() +
     ggplot2::labs(title = title) +
