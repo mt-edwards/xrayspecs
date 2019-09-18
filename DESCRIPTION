@@ -19,7 +19,8 @@ Imports:
     parsnip,
     yardstick,
     forcats,
-    glue
+    glue,
+    tidyr
 URL: https://github.com/mt-edwards/xrayspecs
 BugReports: https://github.com/mt-edwards/xrayspecs/issues
 Suggests: 

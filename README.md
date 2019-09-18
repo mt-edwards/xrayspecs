@@ -26,119 +26,146 @@ devtools::install_github("mt-edwards/xrayspecs")
 
 ``` r
 library(xrayspecs)
+library(tidyverse)
+library(tidymodels)
+library(ranger)
 ```
 
 ### Data Set
 
-The `mtcars` data set is used for this example. The `dplyr` package is
-used to transform the categorical features (`cyl`, `vs`, `am`, `gear`
-and `carb`) to factors. These trasformations are required so that the
-`plot_dependence` function knows how to plot the feature predictions.
-For example, the predictions of continuous features are displayed with
-line plots and the predictions of categorical features are displayed
-with bar plots.
+The `bike` data set is used for this example.This data set contains
+features only of type double (`<dbl>`) or of type factor (`<fct>`). This
+is required so that the `plot_dependence()` function knows how to plot
+the feature predictions. For example, the predictions of double
+(continuous) features are displayed with line plots and the predictions
+of factor (categorical) features are displayed with bar plots.
 
 ``` r
-library(dplyr)
-
-mtcars <- mtcars %>% 
-  mutate(
-    cyl = factor(cyl),
-    vs = factor(vs),
-    am = factor(am),
-    gear = factor(gear),
-    carb = factor(carb)
-  )
+data("bike")
 ```
 
-### Random Forest and Linear Regression Models
+### Training and Testing Split
 
-A [random forest](https://en.wikipedia.org/wiki/Random_forest) and a
-[linear regression](https://en.wikipedia.org/wiki/Linear_regression)
-model are fit to the `mtcars` data set using the `parsnip` package. The
+The `titanic` data set set is split into a training set and a test set
+with the `rsample` package. The trainiing set is used to train the
+predictive models and the test set is used to test and interpret the
+predictive models.
+
+``` r
+split <- initial_split(bike, prop = 4 / 5, strata = "bikes_rented")
+bike_train <- training(split)
+bike_test <- testing(split)
+```
+
+### Random Forest Model
+
+A [random forest](https://en.wikipedia.org/wiki/Random_forest) is
+trained on the `titanic_train` data set using the `parsnip` package. The
 `parsnip` package provides a unified framework for fitting models in
-`R`. The models that are available for fitting in `parsnip` are listed
+`R`. The models that are available for training in `parsnip` are listed
 [here](https://tidymodels.github.io/parsnip/articles/articles/Models.html).
 The `xrayspecs` package is designed to integrate into the `parsnip`
 package’s unified framework.
 
 ``` r
-library(parsnip)
-
-# Random forest
 rf <- rand_forest(mode = "regression") %>% 
   set_engine("ranger") %>% 
-  fit(mpg ~ ., data = mtcars)
+  fit(bikes_rented ~ ., data = bike_train)
+```
 
-# Linear regression
-lr <- linear_reg() %>% 
-  set_engine("lm") %>% 
-  fit(mpg ~ ., data = mtcars)
+### Testing models
+
+``` r
+predict(rf, bike_test) %>% 
+  bind_cols(bike_test) %>% 
+  mae(truth = bikes_rented, estimate = .pred)
+#> # A tibble: 1 x 3
+#>   .metric .estimator .estimate
+#>   <chr>   <chr>          <dbl>
+#> 1 mae     standard        281.
 ```
 
 ### Permutation Importance Plot
 
 To display a [permutation
 importance](https://christophm.github.io/interpretable-ml-book/feature-importance.html)
-plot of the random forest and linear regression features all you need to
-do is pipe the `rf` and `lr` objects into the `plot_importance` function
-along with the data (`mtcars`) the target (`mpg`) and a metric from the
-`yardstick` package, e.g. `mae` (Mean Absolute Error). A feature
+plot of the random forest features all you need to do is pipe the `rf`
+object into the `plot_importance()` function along with the test data
+(`bike_test`) the target (`bike_rentals`) and a metric from the
+`yardstick` package, e.g. `mae` (Mean Absolute Error). A feature
 importance is equal to the absolute difference between the metric
 estimates when the feature is and is not permuted in the data. **Note**:
 metrics must be appropriate for the target variable.
 
 ``` r
-library(yardstick)
-library(ggplot2)
-
-# Random forest
 rf %>% 
-  plot_importance(mtcars, mpg, mae) +
-  labs(subtitle = "Random Forest")
-
-# Linear regression
-lr %>% 
-  plot_importance(mtcars, mpg, mae) +
-  labs(subtitle = "Linear Regression")
+  plot_importance(bike_test, bikes_rented, mae) +
+  labs(title = "Permutation Importance Plot")
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="50%" /><img src="man/figures/README-unnamed-chunk-5-2.png" width="50%" />
+<img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />
 
 ### Partial Dependence Plot
 
 To display a [partial
 dependence](https://christophm.github.io/interpretable-ml-book/pdp.html)
-plot of a feature for the random forest and linear regression models all
-you need to do is pipe the `rf` and `lr` objects into the
-`plot_dependence` function along with the data (`mtcars`) and the
-feature. Here the partial dependence plots of the most “important”
-continuous and categorical features (`wt` and `cyl`) are displayed.
+plot of a feature for the random forest model all you need to do is pipe
+the `rf` object into the `plot_dependence()` function along with the
+data (`bike_test`) and the feature. Here the partial dependence plots of
+`temperature`, `humidity` and `wind_speed` are displayed.
 
 ``` r
-# Random forest
 rf %>% 
-  plot_dependence(mtcars, wt) +
-  labs(subtitle = "Random Forest")
+  plot_dependence(bike_test, temperature) +
+  labs(title = "Partial Dependence Plot") +
+  labs(x = "Temperature")
 
-# Linear regression
-lr %>% 
-  plot_dependence(mtcars, wt) +
-  labs(subtitle = "Linear Regression")
+rf %>% 
+  plot_dependence(bike_test, humidity) +
+  labs(title = "Partial Dependence Plot") +
+  labs(x = "Humidity")
+
+rf %>% 
+  plot_dependence(bike_test, wind_speed) +
+  labs(title = "Partial Dependence Plot") +
+  labs(x = "Wind Speed")
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="50%" /><img src="man/figures/README-unnamed-chunk-6-2.png" width="50%" />
+<img src="man/figures/README-unnamed-chunk-9-1.png" width="33%" /><img src="man/figures/README-unnamed-chunk-9-2.png" width="33%" /><img src="man/figures/README-unnamed-chunk-9-3.png" width="33%" />
 
 ``` r
-# Random forest
 rf %>% 
-  plot_dependence(mtcars, cyl) +
-  labs(subtitle = "Random Forest")
-
-# Linear regression
-lr %>% 
-  plot_dependence(mtcars, cyl) +
-  labs(subtitle = "Linear Regression")
+  plot_dependence(bike_test, season) +
+  labs(title = "Partial Dependence Plot") +
+  labs(x = "Season")
 ```
 
-<img src="man/figures/README-unnamed-chunk-7-1.png" width="50%" /><img src="man/figures/README-unnamed-chunk-7-2.png" width="50%" />
+<img src="man/figures/README-unnamed-chunk-10-1.png" width="100%" />
+
+### Individual Conditional Expectation Plot
+
+To display an [individual conditional
+expectation](https://christophm.github.io/interpretable-ml-book/ice.html)
+plot of a feature for the random forest model all you need to do is pipe
+the `rf` object into the `plot_dependence()` function along with the
+data (`bike_test`) and the feature with the optional argument `examples`
+assigned to `TRUE`.
+
+``` r
+rf %>% 
+  plot_dependence(bike_test, days_since_2011) +
+  labs(title = "Partial Dependence Plot") +
+  labs("Days Since 2011")
+
+rf %>% 
+  plot_dependence(bike_test, days_since_2011, examples = TRUE) +
+  labs(title = "Individual Conditional Expectation Plot") +
+  labs(x = "Days Since 2011")
+
+rf %>% 
+  plot_dependence(bike_test, days_since_2011, examples = TRUE, center = TRUE) +
+  labs(title = "Centered Individual Conditional Expectation Plot") +
+  labs(x = "Days Since 2011")
+```
+
+<img src="man/figures/README-unnamed-chunk-11-1.png" width="33%" /><img src="man/figures/README-unnamed-chunk-11-2.png" width="33%" /><img src="man/figures/README-unnamed-chunk-11-3.png" width="33%" />
