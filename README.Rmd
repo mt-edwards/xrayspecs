@@ -18,11 +18,11 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The `xrayspecs` package provides model-agnostic interpretations of black-box models. The package is designed to integrate into the `parsnip` package's unified modelling framework.
+The xrayspecs package provides model-agnostic interpretations of black-box models. The package is designed to integrate into the `parsnip` package's unified modelling framework. Currently the package supports: permutation importance plots, partial dependence plots and individual conditional expectation plots.
 
 ## Installation
 
-You cannot currently install xrayspecs from [CRAN](https://CRAN.R-project.org). However, you can install the development version from [GitHub](https://github.com/) with:
+You cannot currently install xrayspecs from [CRAN](https://CRAN.R-project.org). However, you can install the development version of xrayspecs from [GitHub](https://github.com/) with:
 
 ```{r, eval=FALSE}
 # install.packages("devtools")
@@ -39,7 +39,7 @@ library(ranger)
 
 ### Data Set
 
-The `bike` data set is used for this example.This data set contains features only of type double (`<dbl>`) or of type factor (`<fct>`). This is required so that the `plot_dependence()` function knows how to plot the feature predictions. For example, the predictions of double (continuous) features are displayed with line plots and the predictions of factor (categorical) features are displayed with bar plots.
+The `bike` data set is used for this example.This data set contains features only of type double (`<dbl>`) and type factor (`<fct>`). This is required so that the `plot_dependence()` function knows how to plot the feature predictions. For example, the predictions of double (continuous) features are displayed with line plots and the predictions of factor (categorical) features are displayed with bar plots.
 
 ```{r message=FALSE, warning=FALSE}
 data("bike")
@@ -47,7 +47,7 @@ data("bike")
 
 ### Training and Testing Split
 
-The `titanic` data set set is split into a training set and a test set with the `rsample` package. The trainiing set is used to train the predictive models and the test set is used to test and interpret the predictive models.
+The `titanic` data set set is split into a training set and a test set with the rsample package. The trainiing set is used to train the predictive models and the test set is used to test and interpret the predictive models.
 
 ```{r}
 split <- initial_split(bike, prop = 4 / 5, strata = "bikes_rented")
@@ -57,7 +57,7 @@ bike_test <- testing(split)
 
 ### Random Forest Model
 
-A [random forest](https://en.wikipedia.org/wiki/Random_forest) is trained on the `titanic_train` data set using the `parsnip` package. The `parsnip` package provides a unified framework for fitting models in `R`. The models that are available for training in `parsnip` are listed [here](https://tidymodels.github.io/parsnip/articles/articles/Models.html). The `xrayspecs` package is designed to integrate into the `parsnip` package's unified framework.
+A [random forest](https://en.wikipedia.org/wiki/Random_forest) is trained on the `bike_train` data set using the `parsnip` package. The `parsnip` package provides a unified framework for fitting models in `R`. The models that are available for training in `parsnip` are listed [here](https://tidymodels.github.io/parsnip/articles/articles/Models.html). The xrayspecs package is designed to integrate into the `parsnip` package's unified framework.
 
 ```{r message=FALSE, warning=FALSE}
 rf <- rand_forest(mode = "regression") %>% 
@@ -75,9 +75,9 @@ predict(rf, bike_test) %>%
 
 ### Permutation Importance Plot
 
-To display a [permutation importance](https://christophm.github.io/interpretable-ml-book/feature-importance.html) plot of the random forest features all you need to do is pipe the `rf` object into the `plot_importance()` function along with the test data (`bike_test`) the target (`bike_rentals`) and a metric from the `yardstick` package, e.g. `mae` (Mean Absolute Error). A feature importance is equal to the absolute difference between the metric estimates when the feature is and is not permuted in the data. **Note**: metrics must be appropriate for the target variable.
+To display a [permutation importance](https://christophm.github.io/interpretable-ml-book/feature-importance.html) plot of the random forest features all you need to do is pipe the `rf` object into the `plot_importance()` function along with the test data (`bike_test`) the target (`bike_rentals`) and a metric from the `yardstick` package, e.g. `mae` (Mean Absolute Error). A feature importance is equal to the absolute difference between the metric estimate when the feature is and is not permuted in the data. **Note**: metrics must be appropriate for the target variable.
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, out.width='50%'}
 rf %>% 
   plot_importance(bike_test, bikes_rented, mae) +
   labs(title = "Permutation Importance Plot")
@@ -104,7 +104,7 @@ rf %>%
   labs(x = "Wind Speed")
 ```
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, out.width='50%'}
 rf %>% 
   plot_dependence(bike_test, season) +
   labs(title = "Partial Dependence Plot") +
@@ -113,7 +113,7 @@ rf %>%
 
 ### Individual Conditional Expectation Plot
 
-To display an [individual conditional expectation](https://christophm.github.io/interpretable-ml-book/ice.html) plot of a feature for the random forest model all you need to do is pipe the `rf` object into the `plot_dependence()` function along with the data (`bike_test`) and the feature with the optional argument `examples` assigned to `TRUE`.
+To display an [individual conditional expectation](https://christophm.github.io/interpretable-ml-book/ice.html) plot of a feature for the random forest model all you need to do is pipe the `rf` object into the `plot_dependence()` function along with the data (`bike_test`) and the feature with the optional argument `examples` assigned to `TRUE`. Individual conditional expectation plots are not available for features of type double.
 
 ```{r message=FALSE, warning=FALSE, fig.show='hold', out.width='33%'}
 rf %>% 

@@ -34,7 +34,7 @@ calculate_prediction <- function(object, data, class) {
     parsnip::predict.model_fit(object, data)
   } else if (object$spec$mode == "classification") {
     parsnip::predict.model_fit(object, data, type = "prob") %>%
-      dplyr::select(.pred = dplyr::pull(.data, class))
+      dplyr::select(.pred = .data[[class]])
   }
 }
 
@@ -93,7 +93,7 @@ plot_dependence <- function(object, data, feature, len = 40, class = 1, examples
   dependence_data <- estimate_dependence(object, data, {{feature}}, len, class, center)
   p <- dependence_data %>%
     dplyr::group_by({{feature}}) %>%
-    dplyr::summarise(mean_pred = mean(.pred)) %>%
+    dplyr::summarise(mean_pred = mean(.data$.pred)) %>%
     ggplot2::ggplot()
   if (feature_class == "numeric") {
     if (examples) {

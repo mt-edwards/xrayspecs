@@ -19,7 +19,7 @@ permute_feature <- function(data, feature) {
 estimate_metric <- function(object, data, target, metric) {
   parsnip::predict.model_fit(object, data) %>%
     dplyr::bind_cols(data) %>%
-    metric(truth = {{target}}, estimate = dplyr::first(.))
+    metric(truth = {{target}}, estimate = .[[1]])
 }
 
 #' Estimate Importance
