@@ -19,8 +19,7 @@ permute_feature <- function(data, feature) {
 estimate_metric <- function(object, data, target, metric) {
   parsnip::predict.model_fit(object, data) %>%
     dplyr::bind_cols(data) %>%
-    metric(truth = {{target}}, estimate = dplyr::first(.)) %>%
-    dplyr::select(.estimate)
+    metric(truth = {{target}}, estimate = dplyr::first(.))
 }
 
 #' Estimate Importance
@@ -37,7 +36,7 @@ estimate_metric <- function(object, data, target, metric) {
 #'
 #' @examples
 estimate_importance <- function(object, data, feature, target, metric, sample_size) {
-  metric_data <- estimate_metric(object, data, {{target}}, metric)
+  metricdata <- estimate_metric(object, data, {{target}}, metric)
   seq_len(sample_size) %>%
     purrr::map(~ permute_feature(data, {{feature}})) %>%
     purrr::map_dfr(estimate_metric,
@@ -45,12 +44,12 @@ estimate_importance <- function(object, data, feature, target, metric, sample_si
       target = {{target}},
       metric = metric
     ) %>%
-    dplyr::mutate(.importance = abs(.estimate - metric_data$.estimate)) %>%
+    dplyr::mutate(importance = abs(.data$.estimate - metric_data$.estimate)) %>%
     dplyr::summarise(
-      .feature = rlang::as_string(ensym(feature)),
-      .lower   = quantile(.importance, prob = 0.025),
-      .mean    = mean(.importance),
-      .upper   = quantile(.importance, prob = 0.975)
+      feature = rlang::as_string(ensym(feature)),
+      lower = stats::quantile(.data$importance, prob = 0.025),
+      mean = mean(.data$importance),
+      upper = stats::quantile(.data$importance, prob = 0.975)
     )
 }
 
@@ -69,14 +68,14 @@ estimate_importance <- function(object, data, feature, target, metric, sample_si
 plot_importance <- function(object, data, target, metric, sample_size = 100) {
   syms(names(dplyr::select(data, -{{target}}))) %>%
     purrr::map_dfr(estimate_importance,
-      object      = object,
-      data        = data,
-      target      = {{target}},
-      metric      = metric,
+      object = object,
+      data = data,
+      target = {{target}},
+      metric = metric,
       sample_size = sample_size
     ) %>%
-    ggplot2::ggplot(ggplot2::aes(x = forcats::fct_reorder(.feature, .mean), y = .mean)) +
-    ggplot2::geom_errorbar(ggplot2::aes(ymin = .lower, ymax = .upper), width = 0.3) +
+    ggplot2::ggplot(ggplot2::aes(x = forcats::fct_reorder(.data$feature, .data$mean), y = .data$mean)) +
+    ggplot2::geom_errorbar(ggplot2::aes(ymin = .data$lower, ymax = .data$upper), width = 0.3) +
     ggplot2::geom_point(size = 2) +
     ggplot2::coord_flip() +
     ggplot2::xlab("Feature") +

@@ -82,7 +82,7 @@ predict(rf, bike_test) %>%
 #> # A tibble: 1 x 3
 #>   .metric .estimator .estimate
 #>   <chr>   <chr>          <dbl>
-#> 1 mae     standard        281.
+#> 1 mae     standard        449.
 ```
 
 ### Permutation Importance Plot
@@ -92,7 +92,7 @@ importance](https://christophm.github.io/interpretable-ml-book/feature-importanc
 plot of the random forest features all you need to do is pipe the `rf`
 object into the `plot_importance()` function along with the test data
 (`bike_test`) the target (`bike_rentals`) and a metric from the
-`yardstick` package, e.g. `mae` (Mean Absolute Error). A feature
+`yardstick` package, e.g. `mae` (Mean Absolute Error). A feature
 importance is equal to the absolute difference between the metric
 estimates when the feature is and is not permuted in the data. **Note**:
 metrics must be appropriate for the target variable.

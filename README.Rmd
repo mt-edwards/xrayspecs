@@ -59,7 +59,7 @@ bike_test <- testing(split)
 
 A [random forest](https://en.wikipedia.org/wiki/Random_forest) is trained on the `titanic_train` data set using the `parsnip` package. The `parsnip` package provides a unified framework for fitting models in `R`. The models that are available for training in `parsnip` are listed [here](https://tidymodels.github.io/parsnip/articles/articles/Models.html). The `xrayspecs` package is designed to integrate into the `parsnip` package's unified framework.
 
-```{r message=FALSE, warning=FALSE, cache=TRUE}
+```{r message=FALSE, warning=FALSE}
 rf <- rand_forest(mode = "regression") %>% 
   set_engine("ranger") %>% 
   fit(bikes_rented ~ ., data = bike_train)
@@ -77,7 +77,7 @@ predict(rf, bike_test) %>%
 
 To display a [permutation importance](https://christophm.github.io/interpretable-ml-book/feature-importance.html) plot of the random forest features all you need to do is pipe the `rf` object into the `plot_importance()` function along with the test data (`bike_test`) the target (`bike_rentals`) and a metric from the `yardstick` package, e.g. `mae` (Mean Absolute Error). A feature importance is equal to the absolute difference between the metric estimates when the feature is and is not permuted in the data. **Note**: metrics must be appropriate for the target variable.
 
-```{r message=FALSE, warning=FALSE, cache=TRUE}
+```{r message=FALSE, warning=FALSE}
 rf %>% 
   plot_importance(bike_test, bikes_rented, mae) +
   labs(title = "Permutation Importance Plot")

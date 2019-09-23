@@ -10,6 +10,7 @@ Description: xrayspecs provides model-agnostic interprestions of tidymodels.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
+Depends: R (>= 2.10)
 Imports: 
     dplyr,
     purrr,
@@ -19,7 +20,6 @@ Imports:
     parsnip,
     yardstick,
     forcats,
-    glue,
     tidyr
 URL: https://github.com/mt-edwards/xrayspecs
 BugReports: https://github.com/mt-edwards/xrayspecs/issues

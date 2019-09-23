@@ -4,8 +4,8 @@
 \alias{plot_dependence}
 \title{Plot Dependence}
 \usage{
-plot_dependence(object, data, feature, len = 40, class_prob = 1,
-  title = "Partial Dependence")
+plot_dependence(object, data, feature, len = 40, class = 1,
+  examples = FALSE, center = FALSE)
 }
 \arguments{
 \item{object}{An object of class `model_fit`.}
@@ -16,9 +16,11 @@ plot_dependence(object, data, feature, len = 40, class_prob = 1,
 
 \item{len}{The feature sequence length if the feature variable is of class `numeric`.}
 
-\item{title}{A character string for the title.}
-
 \item{class}{The class probability to predict if the object has mode classification.}
+
+\item{examples}{Display the dependence plot of all the examples.}
+
+\item{center}{Center the depedence plot on the first feature value.}
 }
 \description{
 Plot Dependence

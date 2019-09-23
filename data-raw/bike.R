@@ -1,10 +1,6 @@
-load("bike.RData")
-
-summary(bike)
-
-bike <- bike %>%
-  as_tibble() %>%
-  rename(
+bike <- readr::read_csv("data-raw/bike.csv") %>%
+  tibble::as_tibble() %>%
+  dplyr::rename(
     year = yr,
     month = mnth,
     working_day = workingday,
@@ -13,14 +9,14 @@ bike <- bike %>%
     humidity = hum,
     bikes_rented = cnt,
     wind_speed = windspeed
-    ) %>%
-  mutate(
-    season = fct_recode(season,
+  ) %>%
+  dplyr::mutate(
+    season = forcats::fct_recode(season,
       "Spring" = "SPRING",
       "Summer" = "SUMMER",
       "Autumn" = "FALL",
       "Winter" = "WINTER"),
-    month = fct_recode(month,
+    month = forcats::fct_recode(month,
       "January" = "JAN",
       "Feburary" = "FEB",
       "March" = "MAR",
@@ -33,10 +29,10 @@ bike <- bike %>%
       "October" = "OKT",
       "November" = "NOV",
       "December" = "DEZ"),
-    holiday = fct_recode(holiday,
+    holiday = forcats::fct_recode(holiday,
       "No" = "NO HOLIDAY",
       "Yes" = "HOLIDAY"),
-    weekday = fct_recode(weekday,
+    weekday = forcats::fct_recode(weekday,
       "Sunday" = "SUN",
       "Monday" = "MON",
       "Tuesday" = "TUE",
@@ -44,11 +40,12 @@ bike <- bike %>%
       "Thursday" = "THU",
       "Friday" = "FRI",
       "Saturday" = "SAT"),
-    working_day = fct_recode(working_day,
+    working_day = forcats::fct_recode(working_day,
       "No" = "NO WORKING DAY",
       "Yes" = "WORKING DAY"),
-    weather = fct_recode(weather,
+    weather = forcats::fct_recode(weather,
       "Good" = "GOOD",
       "Misty" = "MISTY",
-      "Rain/Snow/Storm" = "RAIN/SNOW/STORM")
-    )
+      "Rain/Snow/Storm" = "RAIN/SNOW/STORM"))
+
+usethis::use_data(bike)

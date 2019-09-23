@@ -2,9 +2,9 @@
 % Please edit documentation in R/dependence.R
 \name{estimate_dependence}
 \alias{estimate_dependence}
-\title{Dependence Data}
+\title{Estimate Dependence}
 \usage{
-estimate_dependence(object, data, feature, len, class)
+estimate_dependence(object, data, feature, len, class, center)
 }
 \arguments{
 \item{object}{An object of class `model_fit`.}
@@ -13,10 +13,12 @@ estimate_dependence(object, data, feature, len, class)
 
 \item{feature}{A feature variable.}
 
+\item{len}{A length of the feature sequence if the object has mode regression.}
+
 \item{class}{The class probability to predict if the object has mode classification.}
 
-\item{feature_len}{A length of the feature sequence if the object has mode regression.}
+\item{center}{Center the depedence plot on the first feature value.}
 }
 \description{
-Dependence Data
+Estimate Dependence
 }
