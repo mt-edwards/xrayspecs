@@ -36,9 +36,9 @@ estimate_metric <- function(object, data, target, metric) {
 #'
 #' @examples
 estimate_importance <- function(object, data, feature, target, metric, sample_size) {
-  metricdata <- estimate_metric(object, data, {{target}}, metric)
+  metric_data <- estimate_metric(object, data, {{target}}, metric)
   seq_len(sample_size) %>%
-    purrr::map(~ permute_feature(data, {{feature}})) %>%
+    purrr::map(~permute_feature(data, {{feature}})) %>%
     purrr::map_dfr(estimate_metric,
       object = object,
       target = {{target}},
