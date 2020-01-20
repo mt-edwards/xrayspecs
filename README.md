@@ -49,10 +49,10 @@ data("bike")
 
 ### Training and Testing Split
 
-The `titanic` data set set is split into a training set and a test set
-with the rsample package. The trainiing set is used to train the
-predictive models and the test set is used to test and interpret the
-predictive models.
+The `bike` data set set is split into a training set and a test set with
+the rsample package. The trainiing set is used to train the predictive
+models and the test set is used to test and interpret the predictive
+models.
 
 ``` r
 split <- initial_split(bike, prop = 4 / 5, strata = "bikes_rented")
@@ -85,7 +85,7 @@ predict(rf, bike_test) %>%
 #> # A tibble: 1 x 3
 #>   .metric .estimator .estimate
 #>   <chr>   <chr>          <dbl>
-#> 1 mae     standard        488.
+#> 1 mae     standard        431.
 ```
 
 ### Permutation Importance Plot
