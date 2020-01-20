@@ -85,7 +85,7 @@ predict(rf, bike_test) %>%
 #> # A tibble: 1 x 3
 #>   .metric .estimator .estimate
 #>   <chr>   <chr>          <dbl>
-#> 1 mae     standard        431.
+#> 1 mae     standard        461.
 ```
 
 ### Permutation Importance Plot
@@ -153,7 +153,7 @@ plot of a feature for the random forest model all you need to do is pipe
 the `rf` object into the `plot_dependence()` function along with the
 data (`bike_test`) and the feature with the optional argument `examples`
 assigned to `TRUE`. Individual conditional expectation plots are not
-available for features of type double.
+available for features of type factor
 
 ``` r
 rf %>% 

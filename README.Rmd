@@ -113,7 +113,7 @@ rf %>%
 
 ### Individual Conditional Expectation Plot
 
-To display an [individual conditional expectation](https://christophm.github.io/interpretable-ml-book/ice.html) plot of a feature for the random forest model all you need to do is pipe the `rf` object into the `plot_dependence()` function along with the data (`bike_test`) and the feature with the optional argument `examples` assigned to `TRUE`. Individual conditional expectation plots are not available for features of type double.
+To display an [individual conditional expectation](https://christophm.github.io/interpretable-ml-book/ice.html) plot of a feature for the random forest model all you need to do is pipe the `rf` object into the `plot_dependence()` function along with the data (`bike_test`) and the feature with the optional argument `examples` assigned to `TRUE`. Individual conditional expectation plots are not available for features of type factor
 
 ```{r message=FALSE, warning=FALSE, fig.show='hold', out.width='33%'}
 rf %>% 
